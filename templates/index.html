@@ -1,1 +1,125 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Booking</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='s1.css') }}">
+    <style>
+        .video-container {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .video-container video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video autoplay muted loop>
+            <source src="{{ url_for('static', filename='v1.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="container">
+        <h1>Book Domestic and International Flight Tickets</h1>
+        <form class="booking-form" action="/predict" method="post">
+            <div class="trip-options">
+                <label><input type="radio" name="trip-type" value="One-way" checked> One-way</label>
+                <label><input type="radio" name="trip-type" value="Round-trip"> Round-trip</label>
+            </div>
+            <div class="input-fields">
+                <select name="airline" id="airline">
+                    <option value="">Select Airline</option>
+                    <option value="0">Air Asia</option>
+                    <option value="1">Air India</option>
+                    <option value="2">GoAir</option>
+                    <option value="3">IndiGo</option>
+                    <option value="4">Jet Airways</option>
+                    <option value="5">Jet Airways Business</option>
+                    <option value="6">Multiple carriers</option>
+                    <option value="7">Multiple carriers Premium economy</option>
+                    <option value="8">SpiceJet</option>
+                    <option value="9">Trujet</option>
+                    <option value="10">Vistara</option>
+                    <option value="11">Vistara Premium economy</option>
+                </select>
+                <select name="from" id="from" required>
+                    <option value="">From</option>
+                    <option value="0">Banglore</option>
+                    <option value="1">Chennai</option>
+                    <option value="2">Delhi</option>
+                    <option value="3">Kolkata</option>
+                    <option value="4">Mumbai</option>
+                </select>
+                <select name="to" id="to" required>
+                    <option value="">To</option>
+                    <option value="0">Banglore</option>
+                    <option value="1">Cochin</option>
+                    <option value="2">Delhi</option>
+                    <option value="3">Hyderabad</option>
+                    <option value="4">Kolkata</option>
+                    <option value="5">New Delhi</option>
+                </select>
+                <input type="number" name="stops" id="stops" placeholder="Stops" min="0" max="10" value="0" required>
+                <input type="date" name="departure-date" id="departure-date" required>
+                <input type="time" name="departure-time" id="departure-time" required>
+                <input type="time" name="arrival-time" id="arrival-time" required>
+                <select name="additional-info" id="additional-info">
+                    <option value="0">1 Long layover</option>
+                    <option value="1">1 Short layover</option>
+                    <option value="2">2 Long layover</option>
+                    <option value="3">Business class</option>
+                    <option value="4">Change airports</option>
+                    <option value="5">In-flight meal not included</option>
+                    <option value="6">No Info</option>
+                    <option value="7">No check-in baggage included</option>
+                    <option value="8">No info</option>
+                    <option value="9">Red-eye flight</option>
+                </select>
+                <select name="travellers" id="travellers">
+                    <option value="">Adults</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+            <div class="special-fares">
+                <label><input type="checkbox" name="student"> Student</label>
+                <label><input type="checkbox" name="senior-citizen"> Senior Citizen</label>
+                <label><input type="checkbox" name="armed-forces"> Armed Forces</label>
+                <label><input type="checkbox" name="doctor-nurse"> Doctors & Nurses</label>
+            </div>
+            <button type="submit" class="search-button">SEARCH</button>
+        </form>
+        {% if prediction %}
+        <div id="result-popup" class="popup">
+            <div class="popup-content">
+                <span class="close-button" onclick="closePopup()">&times;</span>
+                <h2>Tickets Price  {{ prediction }}</h2>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        function closePopup() {
+            document.getElementById("result-popup").style.display = "none";
+        }
+    </script>
+</body>
+</html>
